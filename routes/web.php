@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\SubtypeController;
+use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -35,6 +36,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/sub-types/view/{id}', [SubtypeController::class, 'view'])->name('subtypes.view');
 
     // Rooms
+    Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
+    Route::get('/rooms/list', [RoomController::class, 'get'])->name('rooms.get');
+    Route::get('/rooms/create', [RoomController::class, 'create'])->name('rooms.create');
+    Route::post('/rooms/store', [RoomController::class, 'store'])->name('rooms.store');
+    Route::get('/rooms/edit/{id}', [RoomController::class, 'edit'])->name('rooms.edit');
+    Route::get('/rooms/delete/{id}', [RoomController::class, 'destroy'])->name('rooms.destroy');
+    Route::get('/rooms/view/{id}', [RoomController::class, 'view'])->name('rooms.view');
 });
 
 require __DIR__.'/auth.php';

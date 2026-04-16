@@ -4,22 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Subtype extends Model
+class Room extends Model
 {
-     protected $fillable = [
+    protected $fillable = [
         'image',
         'name',
         'type_id',
+        'subtype_id',
         'status',
     ];
 
-    public function type()
-    {
+    public function type() {
         return $this->belongsTo(Type::class, 'type_id');
     }
 
-    public function rooms()
-    {
-        return $this->hasMany(Room::class, 'subtype_id');
+    public function subtype() {
+        return $this->belongsTo(Subtype::class, 'subtype_id');
     }
 }

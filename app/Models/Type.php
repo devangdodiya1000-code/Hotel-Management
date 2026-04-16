@@ -17,4 +17,8 @@ class Type extends Model
     {
         return $this->hasMany(Subtype::class, 'type_id');
     }
+
+    public function rooms() {
+        return $this->hasMany(Room::class, 'type_id');
+    }
 }
