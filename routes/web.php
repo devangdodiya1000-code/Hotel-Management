@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\SubtypeController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Route;
 
@@ -43,6 +44,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/rooms/edit/{id}', [RoomController::class, 'edit'])->name('rooms.edit');
     Route::get('/rooms/delete/{id}', [RoomController::class, 'destroy'])->name('rooms.destroy');
     Route::get('/rooms/view/{id}', [RoomController::class, 'view'])->name('rooms.view');
+
+    //Notifications
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/get', [NotificationController::class, 'get'])->name('notifications.get');
+    Route::get('/notifications/create', [NotificationController::class, 'create'])->name('notifications.create');
+    Route::post('/notifications/store', [NotificationController::class, 'store'])->name('notifications.store');
+    Route::get('/notifications/edit/{id}', [NotificationController::class, 'edit'])->name('notifications.edit');
+    Route::get('/notifications/delete/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
+    Route::get('/notifications/view/{id}', [NotificationController::class, 'view'])->name('notifications.view');
 });
 
 require __DIR__.'/auth.php';

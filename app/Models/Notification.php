@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Room extends Model
+class Notification extends Model
 {
     protected $fillable = [
-        'image',
         'name',
+        'image',
         'type_id',
         'subtype_id',
+        'room_id',
         'status',
     ];
 
@@ -22,7 +23,7 @@ class Room extends Model
         return $this->belongsTo(Subtype::class, 'subtype_id');
     }
 
-    public function notifications() {
-        return $this->hasMany(Notification::class, 'room_id');
+    public function room() {
+        return $this->belongsTo(Room::class, 'room_id');
     }
 }

@@ -22,4 +22,8 @@ class Subtype extends Model
     {
         return $this->hasMany(Room::class, 'subtype_id');
     }
+
+    public function notifications() {
+        return $this->hasMany(Notification::class, 'subtype_id');
+    }
 }

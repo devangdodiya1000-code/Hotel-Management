@@ -21,4 +21,8 @@ class Type extends Model
     public function rooms() {
         return $this->hasMany(Room::class, 'type_id');
     }
+
+    public function notifications() {
+        return $this->hasMany(Notification::class, 'type_id');
+    }
 }
