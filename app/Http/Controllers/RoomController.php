@@ -11,12 +11,23 @@ class RoomController extends Controller
 {
     public function index() {
         $title = "Hotel Rooms";
+        $types = Type::where('status', 1)->get();
 
-        return view('rooms/index', compact('title'));
+        return view('rooms/index', compact('title', 'types'));
     }
 
-    public function get() {
-        $rooms = Room::with('type','subtype')->where('status', 1)->get();
+    public function get(Request $request) {
+        $query = Room::with('type','subtype')->where('status', 1);
+
+        if($request->name){
+            $query->where('name', 'LIKE', '%'. $request->name . '%');
+        }
+
+        if($request->type) {
+            $query->where('type_id', 'LIKE', '%'. $request->type . '%');
+        }
+
+        $rooms = $query->get();
 
         $html = view('rooms/get_ajax_rooms_list', compact('rooms'))->render();
 

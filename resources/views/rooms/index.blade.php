@@ -18,8 +18,15 @@
                         <thead>
                         <tr>
                             <th>Image</th>
-                            <th>Name</th>
-                            <th>Type Name</th>
+                            <th><input type="text" id="nameSearch" class="form-control" placeholder="Search name..."></th>
+                            <th>
+                                <select class="form-select" id="typeSearch" aria-label="Default select example">
+                                    <option value="">Select Type</option>
+                                    @foreach ($types as $type)
+                                        <option value="{{ $type->id }}"> {{ $type->name }}</option>
+                                    @endforeach
+                                </select>
+                            </th>
                             <th>Sub Type Name</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -40,12 +47,22 @@
 <script>
     $(document).ready(function() {
         getRooms();
+
+        $('#nameSearch').on('keyup', function() {
+            // getRooms($(this).val());
+            getRooms();
+        });
+
+        $('#typeSearch').on('change', function() {
+            getRooms();
+        });
     })
 
     function getRooms() {
         $.ajax({
             url: "{{ route('rooms.get') }}",
             type: "GET",
+            data: { name: $('#nameSearch').val(), type: $('#typeSearch').val() },
             success: function(response) {
                 if(response.status) {
                     $('#rooms-data').html(response.html);
