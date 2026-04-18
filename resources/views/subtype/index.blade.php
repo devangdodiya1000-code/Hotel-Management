@@ -18,8 +18,17 @@
                         <thead>
                         <tr>
                             <th>Image</th>
-                            <th>Name</th>
-                            <th>Type Name</th>
+                            <th>
+                                <input type="text" class="form-control" id="searchName" placeholder="Search Name">
+                            </th>
+                            <th>
+                                <select class="form-select" id="type_id" aria-label="Default select example">
+                                    <option value="">Select Type</option>
+                                    @foreach ($types as $type)
+                                        <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                    @endforeach
+                                </select>
+                            </th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -40,12 +49,24 @@
 
     $(document).ready(function() {
         getSubType();
+
+        $('#searchName').on('keyup', function() {
+            getSubType();
+        })
+
+        $('#type_id').on('change', function() {
+            getSubType();
+        })
     });
 
     function getSubType() {
         $.ajax({
-            url: "{{ route('subtypes.get')}}",
+            url: "{{ route('subtypes.get') }}",
             type: "GET",
+            data: {
+                name: $('#searchName').val(),
+                type: $('#type_id').val(),
+            },
             success: function(response) {
                 if(response.status) {
                     $('#sub-types-data').html(response.html);

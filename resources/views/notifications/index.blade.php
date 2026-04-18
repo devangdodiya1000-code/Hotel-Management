@@ -18,10 +18,33 @@
                         <thead>
                         <tr>
                             <th>Image</th>
-                            <th>Name</th>
-                            <th>Type Name</th>
-                            <th>Sub Type Name</th>
-                            <th>Room Name</th>
+                            <th>
+                                <input type="text" class="form-control" id="searchName"  placeholder="Search Name">
+                            </th>
+                            <th>
+                                <select class="form-select" id="type_id"  name="type_id" aria-label="Default select example">
+                                    <option value="">Select Type</option>
+                                    @foreach ($types as $type)
+                                        <option value="{{ $type->id }}" >{{ $type->name }}</option>
+                                    @endforeach
+                                </select>
+                            </th>
+                            <th>
+                                <select class="form-select" id="subtype_id" aria-label="Default select example">
+                                    <option value="">Select Subtype</option>
+                                    @foreach ($subtypes as $subtype)
+                                        <option value="{{ $subtype->id }}" >{{ $subtype->name }}</option>
+                                    @endforeach
+                                </select>
+                            </th>
+                            <th>
+                                <select class="form-select" id="room_id" aria-label="Default select example">
+                                    <option value="">Select Room</option>
+                                    @foreach ($rooms as $room)
+                                        <option value="{{ $room->id }}" >{{ $room->name }}</option>
+                                    @endforeach
+                                </select>
+                            </th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -41,12 +64,26 @@
 <script>
     $(document).ready(function() {
         getNotifications();
+
+        $('#searchName').on('keyup', function() {
+            getNotifications();
+        });
+
+        $('#type_id, #subtype_id, #room_id').on('change', function() {
+            getNotifications();
+        });
     });
 
     function getNotifications() {
         $.ajax({
             url: "{{ route('notifications.get') }}",
             type: "GET",
+            data: {
+                name: $('#searchName').val(),
+                type: $('#type_id').val(),
+                subtype: $('#subtype_id').val(),
+                room: $('#room_id').val(),
+            },
             success: function(response){
                 if(response.status) {
                     $('#notification-data').html(response.html);

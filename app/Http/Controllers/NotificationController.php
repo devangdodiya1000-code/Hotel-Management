@@ -12,12 +12,33 @@ class NotificationController extends Controller
 {
     public function index() {
         $title = "Notifications";
+        $types = Type::where('status', 1)->get();
+        $subtypes = Subtype::where('status', 1)->get();
+        $rooms = Room::where('status', 1)->get();
 
-        return view('notifications/index', compact('title'));
+        return view('notifications/index', compact('types', 'subtypes', 'rooms'));
     }
 
-    public function get() {
-        $notifications = Notification::with('type', 'subtype', 'room')->where('status', 1)->get();
+    public function get(Request $request) {
+        $query = Notification::with('type', 'subtype', 'room')->where('status', 1);
+
+        if($request->name) {
+            $query->where('name', 'LIKE', '%'. $request->name . '%');
+        }
+
+        if($request->type) {
+            $query->where('type_id', 'LIKE', '%'. $request->type . '%');
+        }
+
+        if($request->subtype) {
+            $query->where('subtype_id', 'LIKE', '%'. $request->subtype . '%');
+        }
+
+        if($request->room) {
+            $query->where('room_id', 'LIKE', '%'. $request->room . '%');
+        }
+
+        $notifications = $query->get();
 
         $html = view('notifications/get_ajax_notifications_list', compact('notifications'))->render();
 
@@ -30,7 +51,7 @@ class NotificationController extends Controller
 
     public function create() {
         $title = "Add Notification";
-        
+
         $types = Type::where('status', 1)->get();
         $subtypes = Subtype::where('status', 1)->get();
         $rooms = Room::where('status', 1)->get();

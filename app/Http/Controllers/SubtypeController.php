@@ -10,12 +10,24 @@ class SubtypeController extends Controller
 {
     public function index()
     {
-        return view('subtype.index');
+        $types = Type::where('status', 1)->get();
+
+        return view('subtype.index', compact('types'));
     }
 
-    public function get() {
+    public function get(Request $request) {
 
-        $subtypes = Subtype::with('type')->get();
+        $query = Subtype::with('type');
+
+        if($request->name) {
+            $query->where('name', 'LIKE', '%'. $request->name . '%');
+        }
+
+        if($request->type) {
+            $query->where('type_id', 'LIKE', '%' . $request->type . '%');
+        }
+
+        $subtypes = $query->get();
 
         $html = view('subtype/get_ajax_subtype_list', compact('subtypes'))->render();
 
