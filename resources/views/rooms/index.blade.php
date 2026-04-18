@@ -27,7 +27,14 @@
                                     @endforeach
                                 </select>
                             </th>
-                            <th>Sub Type Name</th>
+                            <th>
+                                <select class="form-select" id="subtypeSearch" aria-label="Default select example">
+                                    <option value="">Select Subtype</option>
+                                    @foreach ($subtypes as $subtype)
+                                        <option value="{{ $subtype->id }}"> {{ $subtype->name }}</option>
+                                    @endforeach
+                                </select>
+                            </th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -56,13 +63,21 @@
         $('#typeSearch').on('change', function() {
             getRooms();
         });
+
+        $('#subtypeSearch').on('change', function() {
+            getRooms();
+        });
     })
 
     function getRooms() {
         $.ajax({
             url: "{{ route('rooms.get') }}",
             type: "GET",
-            data: { name: $('#nameSearch').val(), type: $('#typeSearch').val() },
+            data: {
+                name: $('#nameSearch').val(),
+                type: $('#typeSearch').val(),
+                subtype: $('#subtypeSearch').val()
+            },
             success: function(response) {
                 if(response.status) {
                     $('#rooms-data').html(response.html);

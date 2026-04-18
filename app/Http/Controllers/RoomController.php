@@ -12,8 +12,9 @@ class RoomController extends Controller
     public function index() {
         $title = "Hotel Rooms";
         $types = Type::where('status', 1)->get();
+        $subtypes = Subtype::where('status', 1)->get();
 
-        return view('rooms/index', compact('title', 'types'));
+        return view('rooms/index', compact('title', 'types', 'subtypes'));
     }
 
     public function get(Request $request) {
@@ -25,6 +26,10 @@ class RoomController extends Controller
 
         if($request->type) {
             $query->where('type_id', 'LIKE', '%'. $request->type . '%');
+        }
+
+        if($request->subtype) {
+            $query->where('subtype_id', 'LIKE', '%'. $request->subtype . '%');
         }
 
         $rooms = $query->get();
