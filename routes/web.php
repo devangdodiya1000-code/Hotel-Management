@@ -55,4 +55,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/notifications/view/{id}', [NotificationController::class, 'view'])->name('notifications.view');
 });
 
+require __DIR__.'/frontend.php';
 require __DIR__.'/auth.php';
