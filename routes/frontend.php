@@ -7,8 +7,9 @@ use App\Models\Type;
 
 Route::get('/home', function() {
     $types = Type::where('status', 1)->get();
-    
+
     return view('frontend/index', compact('types'));
 });
 
 Route::get('/home/get-rooms', [HomeController::class, 'get_rooms'])->name('home.rooms.get');
+Route::post('/home/contact-store', [HomeController::class, 'contactStore'])->name('home.contact.store');
