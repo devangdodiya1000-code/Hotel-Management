@@ -84,6 +84,7 @@ class RoomController extends Controller
             'type_id' => 'required|integer',
             'subtype_id' => 'required|integer',
             'status' => 'nullable|integer',
+            'price' => 'required|numeric',
         ]);
 
         if($request->hasFile('image') && $request->file('image')->isValid()){

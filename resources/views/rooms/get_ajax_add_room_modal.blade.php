@@ -35,6 +35,11 @@
                         <span class="text-danger error-text subtype_id_error"></span>
                     </div>
                     <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">Price</label>
+                        <input type="number" name="price" class="form-control" id="price" value="{{ old('price', $room->price ?? '') }}" placeholder="Please Enter The Price">
+                        <span class="text-danger error-text price_error"></span>
+                    </div>
+                    <div class="mb-3">
                         <label for="formFileSm" class="form-label">Room Image</label>
                         <input class="form-control form-control-sm" id="image" name="image" type="file">
                         @if (!@empty($room->image))

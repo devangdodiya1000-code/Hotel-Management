@@ -43,6 +43,12 @@
                 </div>
             </div>
 
+            <!-- Room Details -->
+            <div class="row mb-2">
+                <div class="col-4 fw-bold text-muted">Room Price:</div>
+                <div class="col-8">{{ $room->price }}</div>
+            </div>
+
         </div>
     </div>
       <div class="modal-footer">

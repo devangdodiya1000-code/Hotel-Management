@@ -6,7 +6,7 @@
                 <div class="card-body">
                     <h5>{{ $room->name }}</h5>
                     <p>{{ $room->type->name }}</p>
-                    <span class="text-warning">₹5000/night</span>
+                    <span class="text-gray">₹{{ $room->price }}</span>
                     <br><br>
                     <button class="btn btn-dark">View</button>
                 </div>

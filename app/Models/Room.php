@@ -12,6 +12,7 @@ class Room extends Model
         'type_id',
         'subtype_id',
         'status',
+        'price',
     ];
 
     public function type() {
