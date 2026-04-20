@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\SubtypeController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +45,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/rooms/edit/{id}', [RoomController::class, 'edit'])->name('rooms.edit');
     Route::get('/rooms/delete/{id}', [RoomController::class, 'destroy'])->name('rooms.destroy');
     Route::get('/rooms/view/{id}', [RoomController::class, 'view'])->name('rooms.view');
+
+    //Contact
+    Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
+    Route::get('/contacts/get', [ContactController::class, 'get'])->name('contacts.get');
+    Route::get('/contacts/create', [ContactController::class, 'create'])->name('contacts.create');
+    Route::post('/contacts/store', [ContactController::class, 'store'])->name('contacts.store');
+    Route::get('/contacts/edit/{id}', [ContactController::class, 'edit'])->name('contacts.edit');
+    Route::get('/contacts/destroy/{id}', [ContactController::class, 'destroy'])->name('contacts.destroy');
+    Route::get('/contacts/view/{id}', [ContactController::class, 'view'])->name('contacts.view');
 
     //Notifications
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
