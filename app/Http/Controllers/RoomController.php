@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Room;
+use App\Models\Booking;
 use App\Models\Type;
 use App\Models\Subtype;
+use Stripe\Stripe;
+use Stripe\Checkout\Session;
 
 class RoomController extends Controller
 {
@@ -144,6 +147,77 @@ class RoomController extends Controller
         $room = Room::find($id);
 
         return view('rooms/room_details', compact('room'));
+    }
+
+    //Payments
+    public function payment($id) {
+        $room = Room::find($id);
+
+        return view('rooms/payment', compact('room'));
+    }
+
+    public function processPayment(Request $request)
+    {
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        $charge = Charge::create([
+            "amount" => $request->amount * 100, // paise
+            "currency" => "inr",
+            "source" => $request->stripeToken,
+            "description" => "Room Booking Payment"
+        ]);
+
+        return back()->with('success', 'Payment Successful!');
+    }
+
+    public function checkout($id)
+    {
+        $room = Room::findOrFail($id);
+
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        $session = \Stripe\Checkout\Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'inr',
+                    'product_data' => [
+                        'name' => $room->name,
+                    ],
+                    'unit_amount' => $room->price * 100,
+                ],
+                'quantity' => 1,
+            ]],
+            'mode' => 'payment',
+            // 'success_url' => url('/success?session_id={CHECKOUT_SESSION_ID}&room_id=' . $room->id),
+            'success_url' => route('payments.success') . '?session_id={CHECKOUT_SESSION_ID}&room_id=' . $room->id,
+            'cancel_url' => url('/cancel'),
+        ]);
+
+        return redirect($session->url);
+    }
+
+    public function success(Request $request)
+    {
+        if (!$request->session_id) {
+            return "Invalid payment session";
+        }
+
+        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        $session = \Stripe\Checkout\Session::retrieve($request->session_id);
+
+        // Store booking
+        Booking::create([
+            'room_id' => $request->room_id,
+            'customer_name' => $session->customer_details->name ?? null,
+            'email' => $session->customer_details->email ?? null,
+            'payment_intent_id' => $session->payment_intent,
+            'payment_status' => $session->payment_status,
+            'amount' => $session->amount_total / 100,
+        ]);
+
+        return "Payment Successful & Booking Saved ✅";
     }
 }
 

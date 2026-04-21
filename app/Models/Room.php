@@ -26,4 +26,10 @@ class Room extends Model
     public function notifications() {
         return $this->hasMany(Notification::class, 'room_id');
     }
+
+    //for payments
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
 }

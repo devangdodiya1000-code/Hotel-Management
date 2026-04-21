@@ -137,12 +137,13 @@
                     </a>
 
                     <!-- Book Now Button -->
-                    <a href="{{ route('room.book', $room->id) }}" class="btn btn-dark w-50">
+                    {{-- <a href="{{ route('room.payment', $room->id) }}" class="btn btn-dark w-50">
+                        Book Now
+                    </a> --}}
+                    <a href="{{ route('checkout', $room->id) }}" class="btn btn-dark w-50">
                         Book Now
                     </a>
-
                 </div>
-
             </div>
         </div>
     </div>

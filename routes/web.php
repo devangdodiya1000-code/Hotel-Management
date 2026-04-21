@@ -47,6 +47,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/rooms/view/{id}', [RoomController::class, 'view'])->name('rooms.view');
     Route::get('/rooms/book/{id}', [RoomController::class, 'book'])->name('room.book');
 
+    //pament
+    Route::get('room/payment/{id}', [RoomController::class, 'payment'])->name('room.payment');
+    Route::post('room/payment', [RoomController::class, 'processPayment'])->name('room.payment.process');
+    Route::get('/checkout/{id}', [RoomController::class, 'checkout'])->name('checkout');
+
+    Route::get('/success', [RoomController::class, 'success'])->name('payments.success');
+
+    Route::get('/cancel', function () {
+        return "Payment Cancelled ❌";
+    });
+
 
     //Contact
     Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
