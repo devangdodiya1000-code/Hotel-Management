@@ -45,6 +45,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/rooms/edit/{id}', [RoomController::class, 'edit'])->name('rooms.edit');
     Route::get('/rooms/delete/{id}', [RoomController::class, 'destroy'])->name('rooms.destroy');
     Route::get('/rooms/view/{id}', [RoomController::class, 'view'])->name('rooms.view');
+    Route::get('/rooms/book/{id}', [RoomController::class, 'book'])->name('room.book');
+
 
     //Contact
     Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');

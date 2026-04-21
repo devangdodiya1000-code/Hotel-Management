@@ -139,5 +139,11 @@ class RoomController extends Controller
             'html' => $html,
         ]);
     }
+
+    public function book($id) {
+        $room = Room::find($id);
+
+        return view('rooms/room_details', compact('room'));
+    }
 }
 

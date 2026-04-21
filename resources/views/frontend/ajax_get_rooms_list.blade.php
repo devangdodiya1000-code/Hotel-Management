@@ -8,7 +8,8 @@
                     <p>{{ $room->type->name }}</p>
                     <span class="text-gray">₹{{ $room->price }}</span>
                     <br><br>
-                    <button class="btn btn-dark">View</button>
+                    {{-- <button class="btn btn-dark">View</button> --}}
+                    <a href="{{ route('room.book', $room->id) }}" class="btn btn-dark">View</a>
                 </div>
             </div>
         </div>
