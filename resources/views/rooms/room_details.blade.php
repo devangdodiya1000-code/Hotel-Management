@@ -128,22 +128,33 @@
                     <h4 class="text-primary mt-1">₹ {{ $room->price }}</h4>
                 </div>
 
-                <!-- Buttons -->
-                <div class="d-flex gap-2 mt-auto">
+                <form action="{{ route('checkout', $room->id) }}" method="GET">
 
-                    <!-- Back Button -->
-                    <a href="{{ url()->previous() }}" class="btn btn-outline-secondary w-50">
-                        ← Back
-                    </a>
+                    <!-- Check-in -->
+                    <div class="mb-3">
+                        <label>Check-in</label>
+                        <input type="date" name="check_in" class="form-control" required>
+                    </div>
 
-                    <!-- Book Now Button -->
-                    {{-- <a href="{{ route('room.payment', $room->id) }}" class="btn btn-dark w-50">
-                        Book Now
-                    </a> --}}
-                    <a href="{{ route('checkout', $room->id) }}" class="btn btn-dark w-50">
-                        Book Now
-                    </a>
-                </div>
+                    <!-- Check-out -->
+                    <div class="mb-3">
+                        <label>Check-out</label>
+                        <input type="date" name="check_out" class="form-control" required>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="d-flex gap-2 mt-auto">
+
+                        <!-- Back Button -->
+                        <a href="{{ url()->previous() }}" class="btn btn-outline-secondary w-50">
+                            ← Back
+                        </a>
+
+                        <button type="submit" class="btn btn-dark w-50">
+                            Book Now
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

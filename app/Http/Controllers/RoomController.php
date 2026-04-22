@@ -7,6 +7,7 @@ use App\Models\Room;
 use App\Models\Booking;
 use App\Models\Type;
 use App\Models\Subtype;
+use Carbon\Carbon;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 
@@ -170,54 +171,139 @@ class RoomController extends Controller
         return back()->with('success', 'Payment Successful!');
     }
 
-    public function checkout($id)
+    // public function checkout($id)
+    // {
+    //     $room = Room::findOrFail($id);
+
+    //     Stripe::setApiKey(env('STRIPE_SECRET'));
+
+    //     $session = \Stripe\Checkout\Session::create([
+    //         'payment_method_types' => ['card'],
+    //         'line_items' => [[
+    //             'price_data' => [
+    //                 'currency' => 'inr',
+    //                 'product_data' => [
+    //                     'name' => $room->name,
+    //                 ],
+    //                 'unit_amount' => $room->price * 100,
+    //             ],
+    //             'quantity' => 1,
+    //         ]],
+    //         'mode' => 'payment',
+    //         // 'success_url' => url('/success?session_id={CHECKOUT_SESSION_ID}&room_id=' . $room->id),
+    //         'success_url' => route('payments.success') . '?session_id={CHECKOUT_SESSION_ID}&room_id=' . $room->id,
+    //         'cancel_url' => url('/cancel'),
+    //     ]);
+
+    //     return redirect($session->url);
+    // }
+
+    public function checkout(Request $request, $id)
     {
+        $request->validate([
+            'check_in'  => 'required|date',
+            'check_out' => 'required|date|after:check_in',
+        ]);
+
         $room = Room::findOrFail($id);
+
+        // Calculate number of days
+        $checkIn  = Carbon::parse($request->check_in);
+        $checkOut = Carbon::parse($request->check_out);
+        $days = $checkIn->diffInDays($checkOut);
+
+        // Total price
+        $totalAmount = $room->price * $days;
 
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
         $session = \Stripe\Checkout\Session::create([
             'payment_method_types' => ['card'],
+
             'line_items' => [[
                 'price_data' => [
                     'currency' => 'inr',
                     'product_data' => [
-                        'name' => $room->name,
+                        'name' => $room->name . " ({$days} nights)",
                     ],
-                    'unit_amount' => $room->price * 100,
+                    'unit_amount' => $totalAmount * 100,
                 ],
                 'quantity' => 1,
             ]],
+
             'mode' => 'payment',
-            // 'success_url' => url('/success?session_id={CHECKOUT_SESSION_ID}&room_id=' . $room->id),
-            'success_url' => route('payments.success') . '?session_id={CHECKOUT_SESSION_ID}&room_id=' . $room->id,
+
+            // Store important data in metadata
+            'metadata' => [
+                'room_id'   => $room->id,
+                'check_in'  => $request->check_in,
+                'check_out' => $request->check_out,
+                'days'      => $days,
+            ],
+
+            // Pass data in success URL (backup)
+            'success_url' => route('payments.success') .
+                '?session_id={CHECKOUT_SESSION_ID}' .
+                '&room_id=' . $room->id .
+                '&check_in=' . $request->check_in .
+                '&check_out=' . $request->check_out,
+
             'cancel_url' => url('/cancel'),
         ]);
 
         return redirect($session->url);
     }
 
+    // public function success(Request $request)
+    // {
+    //     if (!$request->session_id) {
+    //         return "Invalid payment session";
+    //     }
+
+    //     \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+
+    //     $session = \Stripe\Checkout\Session::retrieve($request->session_id);
+
+    //     // Store booking
+    //     Booking::create([
+    //         'room_id' => $request->room_id,
+    //         'customer_name' => $session->customer_details->name ?? null,
+    //         'email' => $session->customer_details->email ?? null,
+    //         'payment_intent_id' => $session->payment_intent,
+    //         'payment_status' => $session->payment_status,
+    //         'amount' => $session->amount_total / 100,
+    //     ]);
+
+    //     return "Payment Successful & Booking Saved ✅";
+    // }
+
     public function success(Request $request)
     {
-        if (!$request->session_id) {
-            return "Invalid payment session";
-        }
-
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
         $session = \Stripe\Checkout\Session::retrieve($request->session_id);
 
-        // Store booking
+        // Get metadata
+        $roomId   = $session->metadata->room_id;
+        $checkIn  = $session->metadata->check_in;
+        $checkOut = $session->metadata->check_out;
+
+        // OPTIONAL: get customer details from Stripe
+        $customerName = $session->customer_details->name ?? 'Guest';
+        $customerEmail = $session->customer_details->email ?? 'noemail@gmail.com';
+
         Booking::create([
-            'room_id' => $request->room_id,
-            'customer_name' => $session->customer_details->name ?? null,
-            'email' => $session->customer_details->email ?? null,
+            'room_id' => $roomId,
+            'customer_name' => $customerName,
+            'email' => $customerEmail,
             'payment_intent_id' => $session->payment_intent,
-            'payment_status' => $session->payment_status,
+            'payment_status' => 'paid',
             'amount' => $session->amount_total / 100,
+            'check_in' => $checkIn,
+            'check_out' => $checkOut,
         ]);
 
-        return "Payment Successful & Booking Saved ✅";
+        return "Booking stored successfully!";
     }
 }
 
