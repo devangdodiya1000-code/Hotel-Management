@@ -122,6 +122,7 @@ database/
 
 <img width="1914" height="1008" alt="Screenshot from 2026-04-23 18-38-16" src="https://github.com/user-attachments/assets/a9c5e9f5-6d9f-4d0d-b8ef-51e01c7b16b3" />
 <img width="1914" height="1008" alt="Screenshot from 2026-04-23 18-38-27" src="https://github.com/user-attachments/assets/79f5096d-40f9-4397-a1f8-d89ba594aef1" />
+<img width="1914" height="1008" alt="Screenshot from 2026-04-23 19-10-11" src="https://github.com/user-attachments/assets/12a34be7-259c-4fe7-bd2b-5c60eb07f96a" />
 <img width="1914" height="1008" alt="Screenshot from 2026-04-23 18-38-32" src="https://github.com/user-attachments/assets/89c422bc-107b-4641-afa6-9bd28e149b02" />
 <img width="1914" height="1008" alt="Screenshot from 2026-04-23 18-38-46" src="https://github.com/user-attachments/assets/183f03c9-885b-480c-be1d-4e35cada5b8d" />
 <img width="1914" height="1008" alt="Screenshot from 2026-04-23 18-38-53" src="https://github.com/user-attachments/assets/a0989885-3a56-47c0-9689-9127d6df8ac4" />
