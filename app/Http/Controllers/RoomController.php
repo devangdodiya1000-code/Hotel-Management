@@ -303,7 +303,7 @@ class RoomController extends Controller
             'check_out' => $checkOut,
         ]);
 
-        return "Booking stored successfully!";
+        return "Payment successfully!";
     }
 }
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\SubtypeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\InvoiceController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -76,6 +77,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/notifications/edit/{id}', [NotificationController::class, 'edit'])->name('notifications.edit');
     Route::get('/notifications/delete/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
     Route::get('/notifications/view/{id}', [NotificationController::class, 'view'])->name('notifications.view');
+
+    //Invoice
+    Route::get('invoice', [InvoiceController::class, 'index'])->name('invoice.index');
+    Route::get('invoice/get', [InvoiceController::class, 'get'])->name('invoice.get');
 });
 
 require __DIR__.'/frontend.php';
