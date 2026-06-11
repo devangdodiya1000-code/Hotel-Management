@@ -7,6 +7,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -81,6 +82,16 @@ Route::middleware('auth')->group(function () {
     //Invoice
     Route::get('invoice', [InvoiceController::class, 'index'])->name('invoice.index');
     Route::get('invoice/get', [InvoiceController::class, 'get'])->name('invoice.get');
+
+
+    //Test crud operations
+    Route::get('/tests', [TestController::class, 'index'])->name('tests.index');
+    Route::get('/tests/get', [TestController::class, 'get'])->name('tests.get');
+    Route::get('/tests/create', [TestController::class, 'create'])->name('tests.create');
+    Route::post('/tests/store', [TestController::class, 'store'])->name('tests.store');
+    Route::get('tests/edit/{id}', [TestController::class, 'edit'])->name('tests.edit');
+    Route::get('tests/delete/{id}', [TestController::class, 'destroy'])->name('tests.destroy');
+    Route::get('tests/view/{id}', [TestController::class, 'view'])->name('tests.view');
 });
 
 require __DIR__.'/frontend.php';
